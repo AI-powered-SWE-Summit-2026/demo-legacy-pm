@@ -1,0 +1,51 @@
+﻿@model Project
+@{
+    ViewData["Title"] = "Project Details";
+}
+
+<h1>@Model.Name</h1>
+<p class="lead">@Model.Description</p>
+
+<div class="row mb-4">
+    <div class="col-md-4"><strong>Status:</strong> @Model.Status</div>
+    <div class="col-md-4"><strong>Owner:</strong> @Model.OwnerId</div>
+    <div class="col-md-4"><strong>Budget:</strong> @Model.Budget.ToString("C")</div>
+    <div class="col-md-4"><strong>Actual Cost:</strong> @Model.ActualCost.ToString("C")</div>
+    <div class="col-md-4"><strong>Start:</strong> @Model.StartDate.ToShortDateString()</div>
+    <div class="col-md-4"><strong>End:</strong> @Model.EndDate.ToShortDateString()</div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card mb-3">
+            <div class="card-header">Tasks</div>
+            <ul class="list-group list-group-flush">
+                @foreach (var task in Model.Tasks)
+                {
+                    <li class="list-group-item">@task.Title - @task.Status (@task.Priority)</li>
+                }
+            </ul>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card mb-3">
+            <div class="card-header">Milestones</div>
+            <ul class="list-group list-group-flush">
+                @foreach (var milestone in Model.Milestones)
+                {
+                    <li class="list-group-item">@milestone.Name - @milestone.DueDate.ToShortDateString()</li>
+                }
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">Team Members</div>
+    <ul class="list-group list-group-flush">
+        @foreach (var member in Model.Members)
+        {
+            <li class="list-group-item">@member.Resource?.FullName - @member.Role</li>
+        }
+    </ul>
+</div>
