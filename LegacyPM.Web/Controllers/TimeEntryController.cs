@@ -55,6 +55,58 @@ namespace LegacyPM.Web.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        public IActionResult Edit(int id)
+        {
+            var entry = _dbContext.TimeEntries.FirstOrDefault(t => t.Id == id);
+            if (entry == null)
+            {
+                return NotFound();
+            }
+
+            PopulateLists();
+            return View(entry);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(TimeEntry timeEntry)
+        {
+            if (!ModelState.IsValid)
+            {
+                PopulateLists();
+                return View(timeEntry);
+            }
+
+            var existing = _dbContext.TimeEntries.FirstOrDefault(t => t.Id == timeEntry.Id);
+            if (existing == null)
+            {
+                return NotFound();
+            }
+
+            existing.ProjectTaskId = timeEntry.ProjectTaskId;
+            existing.ResourceId = timeEntry.ResourceId;
+            existing.Date = timeEntry.Date;
+            existing.Hours = timeEntry.Hours;
+            existing.Description = timeEntry.Description;
+
+            _dbContext.SaveChanges();
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Delete(int id)
+        {
+            var entry = _dbContext.TimeEntries.FirstOrDefault(t => t.Id == id);
+            if (entry != null)
+            {
+                _dbContext.TimeEntries.Remove(entry);
+                _dbContext.SaveChanges();
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
+
         private void PopulateLists()
         {
             ViewBag.Tasks = new SelectList(_dbContext.ProjectTasks.OrderBy(t => t.Title).ToList(), "Id", "Title");

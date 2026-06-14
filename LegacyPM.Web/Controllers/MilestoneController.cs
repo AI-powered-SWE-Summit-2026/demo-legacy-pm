@@ -49,5 +49,60 @@ namespace LegacyPM.Web.Controllers
             _dbContext.SaveChanges();
             return RedirectToAction(nameof(Index));
         }
+
+        public IActionResult Edit(int id)
+        {
+            var milestone = _dbContext.Milestones.FirstOrDefault(m => m.Id == id);
+            if (milestone == null)
+            {
+                return NotFound();
+            }
+
+            ViewBag.Projects = new SelectList(_dbContext.Projects.ToList(), "Id", "Name", milestone.ProjectId);
+            return View(milestone);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(Milestone milestone)
+        {
+            if (!ModelState.IsValid)
+            {
+                ViewBag.Projects = new SelectList(_dbContext.Projects.ToList(), "Id", "Name", milestone.ProjectId);
+                return View(milestone);
+            }
+
+            var existing = _dbContext.Milestones.FirstOrDefault(m => m.Id == milestone.Id);
+            if (existing == null)
+            {
+                return NotFound();
+            }
+
+            existing.ProjectId = milestone.ProjectId;
+            existing.Name = milestone.Name;
+            existing.Description = milestone.Description;
+            existing.DueDate = milestone.DueDate;
+            existing.IsCompleted = milestone.IsCompleted;
+            existing.CompletedAt = milestone.IsCompleted
+                ? existing.CompletedAt ?? DateTime.Now
+                : null;
+
+            _dbContext.SaveChanges();
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Delete(int id)
+        {
+            var milestone = _dbContext.Milestones.FirstOrDefault(m => m.Id == id);
+            if (milestone != null)
+            {
+                _dbContext.Milestones.Remove(milestone);
+                _dbContext.SaveChanges();
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
     }
 }

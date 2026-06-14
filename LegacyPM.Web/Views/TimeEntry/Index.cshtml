@@ -9,7 +9,7 @@
 </div>
 
 <table class="table table-striped">
-    <thead><tr><th>Date</th><th>Task</th><th>Project</th><th>Resource</th><th>Hours</th><th>Description</th></tr></thead>
+    <thead><tr><th>Date</th><th>Task</th><th>Project</th><th>Resource</th><th>Hours</th><th>Description</th><th>Actions</th></tr></thead>
     <tbody>
     @foreach (var entry in Model)
     {
@@ -20,6 +20,12 @@
             <td>@entry.Resource?.FullName</td>
             <td>@entry.Hours</td>
             <td>@entry.Description</td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@entry.Id" class="btn btn-sm btn-outline-secondary">Edit</a>
+                <form asp-action="Delete" asp-route-id="@entry.Id" method="post" class="d-inline">
+                    <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                </form>
+            </td>
         </tr>
     }
     </tbody>
