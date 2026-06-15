@@ -15,6 +15,7 @@ namespace LegacyPM.Core.Models
     {
         Todo,
         InProgress,
+        OnHold,
         Review,
         Done
     }

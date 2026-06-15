@@ -3,8 +3,8 @@
     ViewData["Title"] = "Tasks";
 }
 
-<div class="d-flex justify-content-between align-items-center mb-3">
-    <h1>Tasks</h1>
+<div class="page-header d-flex justify-content-between align-items-center">
+    <h1 class="page-title">Tasks</h1>
     <a class="btn btn-primary" asp-action="Create">Create Task</a>
 </div>
 
@@ -15,20 +15,24 @@
     <button type="submit" class="btn btn-secondary">Filter</button>
 </form>
 
-<table class="table table-striped">
-    <thead><tr><th>Title</th><th>Project</th><th>Assigned To</th><th>Priority</th><th>Status</th><th>Due Date</th><th></th></tr></thead>
-    <tbody>
-    @foreach (var task in Model)
-    {
-        <tr>
-            <td>@task.Title</td>
-            <td>@task.Project?.Name</td>
-            <td>@task.AssignedTo?.FullName</td>
-            <td>@task.Priority</td>
-            <td>@task.Status</td>
-            <td>@task.DueDate.ToShortDateString()</td>
-            <td><a class="btn btn-sm btn-secondary" asp-action="Edit" asp-route-id="@task.Id">Edit</a></td>
-        </tr>
-    }
-    </tbody>
-</table>
+<div class="card">
+    <div class="table-responsive">
+        <table class="table table-hover mb-0">
+            <thead><tr><th>Title</th><th>Project</th><th>Assigned To</th><th>Priority</th><th>Status</th><th>Due Date</th><th></th></tr></thead>
+            <tbody>
+            @foreach (var task in Model)
+            {
+                <tr>
+                    <td>@task.Title</td>
+                    <td>@task.Project?.Name</td>
+                    <td>@task.AssignedTo?.FullName</td>
+                    <td>@task.Priority</td>
+                    <td>@task.Status</td>
+                    <td>@task.DueDate.ToShortDateString()</td>
+                    <td class="table-actions"><a class="btn btn-sm btn-secondary" asp-action="Edit" asp-route-id="@task.Id">Edit</a></td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>

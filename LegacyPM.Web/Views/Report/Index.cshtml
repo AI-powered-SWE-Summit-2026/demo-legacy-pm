@@ -3,23 +3,27 @@
     ViewData["Title"] = "Reports";
 }
 
-<div class="d-flex justify-content-between align-items-center mb-3">
-    <h1>Reports</h1>
+<div class="page-header d-flex justify-content-between align-items-center">
+    <h1 class="page-title">Reports</h1>
     <a class="btn btn-primary" asp-action="Generate">Generate Report</a>
 </div>
 
-<table class="table table-striped">
-    <thead><tr><th>Project Id</th><th>Type</th><th>Generated At</th><th>User</th><th>Parameters</th></tr></thead>
-    <tbody>
-    @foreach (var report in Model)
-    {
-        <tr>
-            <td>@report.ProjectId</td>
-            <td>@report.ReportType</td>
-            <td>@report.GeneratedAt.ToString("g")</td>
-            <td>@report.GeneratedByUserId</td>
-            <td>@report.Parameters</td>
-        </tr>
-    }
-    </tbody>
-</table>
+<div class="card">
+    <div class="table-responsive">
+        <table class="table table-hover mb-0">
+            <thead><tr><th>Project Id</th><th>Type</th><th>Generated At</th><th>User</th><th>Parameters</th></tr></thead>
+            <tbody>
+            @foreach (var report in Model)
+            {
+                <tr>
+                    <td>@report.ProjectId</td>
+                    <td>@report.ReportType</td>
+                    <td>@report.GeneratedAt.ToString("g")</td>
+                    <td>@report.GeneratedByUserId</td>
+                    <td>@report.Parameters</td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -1,4 +1,5 @@
-﻿using LegacyPM.Core.Models;
+﻿using System;
+using LegacyPM.Core.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace LegacyPM.Core
@@ -22,15 +23,15 @@ namespace LegacyPM.Core
         {
             modelBuilder.Entity<Project>()
                 .Property(p => p.Status)
-                .HasConversion(v => v.ToString(), v => System.Enum.Parse<ProjectStatus>(v));
+                .HasConversion(v => v.ToString(), v => ParseProjectStatus(v));
 
             modelBuilder.Entity<ProjectTask>()
                 .Property(t => t.Priority)
-                .HasConversion(v => v.ToString(), v => System.Enum.Parse<Priority>(v));
+                .HasConversion(v => v.ToString(), v => ParsePriority(v));
 
             modelBuilder.Entity<ProjectTask>()
                 .Property(t => t.Status)
-                .HasConversion(v => v.ToString(), v => System.Enum.Parse<ProjectTaskStatus>(v));
+                .HasConversion(v => v.ToString(), v => ParseProjectTaskStatus(v));
 
             modelBuilder.Entity<Project>()
                 .Property(p => p.Budget)
@@ -107,6 +108,30 @@ namespace LegacyPM.Core
             modelBuilder.Entity<NotificationLog>()
                 .Property(n => n.Culture)
                 .HasMaxLength(10);
+        }
+
+        private static ProjectStatus ParseProjectStatus(string value) =>
+            ParseEnumValue<ProjectStatus>(value, "project status");
+
+        private static Priority ParsePriority(string value) =>
+            ParseEnumValue<Priority>(value, "task priority");
+
+        private static ProjectTaskStatus ParseProjectTaskStatus(string value) =>
+            ParseEnumValue<ProjectTaskStatus>(value, "task status");
+
+        private static TEnum ParseEnumValue<TEnum>(string value, string label) where TEnum : struct, Enum
+        {
+            var normalizedValue = (value ?? string.Empty)
+                .Replace(" ", string.Empty)
+                .Replace("-", string.Empty)
+                .Replace("_", string.Empty);
+
+            if (Enum.TryParse<TEnum>(normalizedValue, true, out var parsed))
+            {
+                return parsed;
+            }
+
+            throw new ArgumentException($"Invalid {label} value '{value}' stored in the database.");
         }
     }
 }

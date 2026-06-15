@@ -5,22 +5,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - LegacyPM</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.6.2/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 </head>
-<body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
-        <a class="navbar-brand" asp-controller="Home" asp-action="Index">LegacyPM</a>
-        <div class="navbar-nav">
-            <a class="nav-item nav-link" asp-controller="Project" asp-action="Index">Projects</a>
-            <a class="nav-item nav-link" asp-controller="Task" asp-action="Index">Tasks</a>
-            <a class="nav-item nav-link" asp-controller="Milestone" asp-action="Index">Milestones</a>
-            <a class="nav-item nav-link" asp-controller="Resource" asp-action="Index">Resources</a>
-            <a class="nav-item nav-link" asp-controller="TimeEntry" asp-action="Index">Time Entries</a>
-            <a class="nav-item nav-link" asp-controller="Report" asp-action="Index">Reports</a>
+<body class="app-body">
+    @{
+        var currentController = (ViewContext.RouteData.Values["controller"]?.ToString() ?? string.Empty).ToLowerInvariant();
+    }
+    <nav class="navbar navbar-expand-lg navbar-dark app-navbar shadow-sm mb-4">
+        <div class="container nav-container">
+            <a class="navbar-brand app-brand" asp-controller="Home" asp-action="Index">
+                LegacyPM
+                <small class="app-brand-subtitle">Portfolio & Delivery Workspace</small>
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mainNavigation" aria-controls="mainNavigation" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="mainNavigation">
+                <div class="navbar-nav ml-auto">
+                    <a class="nav-item nav-link @(currentController == "project" ? "active" : string.Empty)" asp-controller="Project" asp-action="Index">Projects</a>
+                    <a class="nav-item nav-link @(currentController == "task" ? "active" : string.Empty)" asp-controller="Task" asp-action="Index">Tasks</a>
+                    <a class="nav-item nav-link @(currentController == "milestone" ? "active" : string.Empty)" asp-controller="Milestone" asp-action="Index">Milestones</a>
+                    <a class="nav-item nav-link @(currentController == "resource" ? "active" : string.Empty)" asp-controller="Resource" asp-action="Index">Resources</a>
+                    <a class="nav-item nav-link @(currentController == "timeentry" ? "active" : string.Empty)" asp-controller="TimeEntry" asp-action="Index">Time Entries</a>
+                    <a class="nav-item nav-link @(currentController == "report" ? "active" : string.Empty)" asp-controller="Report" asp-action="Index">Reports</a>
+                </div>
+            </div>
         </div>
     </nav>
-    <div class="container">
-        @RenderBody()
+    <div class="container main-container">
+        <main role="main" class="content-shell pb-3">
+            @RenderBody()
+        </main>
     </div>
+    <footer class="app-footer">
+        <div class="container d-flex justify-content-between">
+            <span>LegacyPM</span>
+            <span class="text-muted">Professional demo workspace</span>
+        </div>
+    </footer>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
     @RenderSection("Scripts", required: false)
